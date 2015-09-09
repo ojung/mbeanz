@@ -1,36 +1,19 @@
 # mbeanz
 
-FIXME: description
+Mbean search and execution util.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Install `fzf` first: `brew install --HEAD fzf`
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar mbeanz-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+Either put `mbeanz` in your path or use it from the project root:
+`./mbeanz`
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Oskar Jung
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
