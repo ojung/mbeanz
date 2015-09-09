@@ -1,6 +1,8 @@
 #!/bin/bash
 
-MBEANZ="java -jar target/uberjar/mbeanz-0.1.0-SNAPSHOT-standalone.jar"
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+MBEANZ="java -jar ${DIR}/../target/uberjar/mbeanz-0.1.0-SNAPSHOT-standalone.jar"
 
 MBEAN_AND_OPERATION=$(${MBEANZ} -m list | fzf)
 

@@ -8,8 +8,8 @@ Install `fzf` first: `brew install --HEAD fzf`
 
 ## Usage
 
-Either put `mbeanz` in your path or use it from the project root:
-`./mbeanz`
+Either put `bin/mbeanz` in your path or use it from the project root:
+`bin/mbeanz`
 
 ## License
 
