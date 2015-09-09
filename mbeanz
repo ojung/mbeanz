@@ -1,0 +1,27 @@
+#!/bin/bash
+
+MBEANZ="java -jar target/uberjar/mbeanz-0.1.0-SNAPSHOT-standalone.jar"
+
+MBEAN_AND_OPERATION=$(${MBEANZ} -m list | fzf)
+
+MBEAN=$(echo $MBEAN_AND_OPERATION | awk '{print $1}')
+OPERATION=$(echo $MBEAN_AND_OPERATION | awk '{print $2}')
+
+DESCRIBE_PARAMS=$(${MBEANZ} -m params -b $MBEAN -o ${OPERATION:1})
+
+${MBEANZ} -m describe -b $MBEAN -o ${OPERATION:1}
+
+if [ -z "$DESCRIBE_PARAMS" ]; then
+  ${MBEANZ} -m invoke -b $MBEAN -o ${OPERATION:1}
+else
+  ARGS=()
+  for line in "$DESCRIBE_PARAMS"; do
+    echo $line
+    read user_input
+    ARGS+=($user_input)
+  done
+
+  echo $ARGS | ${MBEANZ} -m invoke -b $MBEAN -o ${OPERATION:1}
+fi
+
+
