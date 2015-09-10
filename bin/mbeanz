@@ -16,14 +16,8 @@ ${MBEANZ} -m describe -b $MBEAN -o ${OPERATION:1}
 if [ -z "$DESCRIBE_PARAMS" ]; then
   ${MBEANZ} -m invoke -b $MBEAN -o ${OPERATION:1}
 else
-  ARGS=()
-  for line in "$DESCRIBE_PARAMS"; do
-    echo $line
-    read user_input
-    ARGS+=($user_input)
-  done
-
-  echo $ARGS | ${MBEANZ} -m invoke -b $MBEAN -o ${OPERATION:1}
+  echo "Arguments:"
+  echo "$DESCRIBE_PARAMS"
+  read -p "enter args separated by space: " user_input
+  ${MBEANZ} -m invoke -b $MBEAN -o ${OPERATION:1} <<< "$user_input"
 fi
-
-

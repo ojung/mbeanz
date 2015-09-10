@@ -59,7 +59,7 @@
                             (map #(keyword (.getType %)))
                             (map list args)
                             (map cast-type))]
-        (println (apply jmx/invoke bean-name operation typed-args)))
+        (when-let [result (apply jmx/invoke bean-name operation typed-args)] (println result)))
       (println (jmx/invoke bean-name operation)))
     (System/exit 0)))
 
