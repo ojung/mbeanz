@@ -1,19 +1,22 @@
 (ns mbeanz.core-test
   (:require [clojure.test :refer :all]
-            [mbeanz.core :refer :all])
+            [mbeanz.core :refer :all]
+            [mbeanz.common :refer :all])
   (:import [java.lang.IllegalArgumentException]))
 
 (deftest index
   (testing "list single mbean"
-    (is (= (list-beans "java.lang:type=Memory") ["java.lang:type=Memory" :gc])))
+    (is (= (list-beans "java.lang:type=Memory") [{:bean "java.lang:type=Memory" :operation :gc}])))
   (testing "list multiple mbeans"
     (is (= (list-beans "java.lang:type=MemoryPool,name=*")
-           ["java.lang:type=MemoryPool,name=Code Cache" :resetPeakUsage
-            "java.lang:type=MemoryPool,name=Compressed Class Space" :resetPeakUsage
-            "java.lang:type=MemoryPool,name=Metaspace" :resetPeakUsage
-            "java.lang:type=MemoryPool,name=PS Eden Space" :resetPeakUsage
-            "java.lang:type=MemoryPool,name=PS Old Gen" :resetPeakUsage
-            "java.lang:type=MemoryPool,name=PS Survivor Space" :resetPeakUsage]))))
+           [{:bean "java.lang:type=MemoryPool,name=Code Cache" :operation :resetPeakUsage}
+            {:bean "java.lang:type=MemoryPool,name=Compressed Class Space"
+             :operation :resetPeakUsage}
+            {:bean "java.lang:type=MemoryPool,name=Metaspace" :operation :resetPeakUsage}
+            {:bean "java.lang:type=MemoryPool,name=PS Eden Space" :operation :resetPeakUsage}
+            {:bean "java.lang:type=MemoryPool,name=PS Old Gen" :operation :resetPeakUsage}
+            {:bean "java.lang:type=MemoryPool,name=PS Survivor Space"
+             :operation :resetPeakUsage}]))))
 
 (deftest show
   (testing "mbean description"
@@ -24,8 +27,17 @@
                  {:name "p1", :type "boolean", :description "p1"})))))
 
 (deftest test-invoke
+  (testing "type deduction for monadic operations"
+    (is (= (get-typed-args "java.util.logging:type=Logging" :getLoggerLevel "asd")
+           [[:java.lang.String "asd"]])))
+  (testing "type deduction for variadic operations"
+    (is (= (get-typed-args "java.lang:type=Threading" :dumpAllThreads "true" "true")
+           [[:boolean "true"] [:boolean "true"]])))
   (testing "mbean with arguments"
-    (is (invoke "java.lang:type=Threading" :getThreadUserTime [:long "1"])))
+    (is (not (invoke "java.util.logging:type=Logging" :getLoggerLevel "asdfg"))))
+  ;TODO: handle overloaded signatures
+  ;(testing "overloaded mbean with arguments"
+    ;(is (invoke "java.lang:type=Threading" :getThreadUserTime "1")))
   (testing "mbean without arguments"
     (is (= (invoke "java.lang:type=Memory" :gc) nil))))
 
@@ -43,7 +55,7 @@
     (is (= (cast-type [:Boolean "true"]) (Boolean. true)))
     (is (= (cast-type [:boolean "true"]) (boolean true))))
   (testing "string"
-    (is (= (cast-type [:String "hello world"]) "hello world")))
+    (is (= (cast-type [:java.lang.String "hello world"]) "hello world")))
   (testing "unsupported type"
     (is (thrown-with-msg? IllegalArgumentException
                           #"Unsupported argument type"
