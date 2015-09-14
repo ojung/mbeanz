@@ -18,9 +18,10 @@ def select_mbean():
     return tuple(mbean_operation)
 
 def describe_mbean(mbean, operation):
-    description = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean})
-    parameters = requests.get(api_url + '/parameters/' + operation, params = {'bean': mbean})
-    return tuple([description.text, parameters.json()])
+    mbean_info = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean}).json()
+    description = mbean_info['description']
+    parameters = mbean_info['parameters']
+    return tuple([description, parameters])
 
 def get_arguments(signature):
     arguments = []
