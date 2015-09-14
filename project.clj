@@ -7,6 +7,7 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [compojure "1.3.4"]
                  [ring.middleware.logger "0.5.0"]
+                 [ring/ring-jetty-adapter "1.4.0"]
                  [ring/ring-mock "0.3.0"]
                  [ring/ring-defaults "0.1.2"]
                  [ring/ring-json "0.4.0"]
@@ -18,5 +19,6 @@
             [lein-cloverage "1.0.6"]
             [lein-environ "1.0.1"]]
   :ring {:handler mbeanz.handler/app}
+  :main mbeanz.handler
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

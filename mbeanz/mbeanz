@@ -4,7 +4,7 @@ from __future__ import print_function
 import requests
 import subprocess32
 
-api_url = 'http://localhost:3001'
+api_url = 'http://localhost:7999'
 
 def get_mbeans():
     response = requests.get(api_url + '/list')

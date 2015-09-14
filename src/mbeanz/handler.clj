@@ -1,4 +1,5 @@
 (ns mbeanz.handler
+  (:gen-class)
   (:require [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-response]]
@@ -7,7 +8,8 @@
             [mbeanz.core :refer :all]
             [mbeanz.common :refer :all]
             [environ.core :refer [env]]
-            [clojure.java.jmx :as jmx]))
+            [clojure.java.jmx :as jmx]
+            [ring.adapter.jetty :refer [run-jetty]]))
 
 (def object-pattern (env :mbeanz-object-pattern))
 
@@ -51,3 +53,6 @@
       (wrap-with-logger)
       (wrap-json-response)
       (wrap-defaults api-defaults)))
+
+(defn -main [& args]
+  (run-jetty app {:port 7999}))
