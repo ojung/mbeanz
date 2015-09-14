@@ -2,7 +2,8 @@
   (:gen-class)
   (:require [clojure.java.jmx :as jmx]
             [clojure.core.match :refer [match]]
-            [mbeanz.common :refer :all])
+            [mbeanz.common :refer :all]
+            [environ.core :refer [env]])
   (:import [java.lang.IllegalArgumentException]))
 
 (defn get-identifiers [[bean-name & bean-ops]]
@@ -29,11 +30,8 @@
 (defn cast-type [[type-name arg]]
   (match [type-name]
          [:int] (int (Integer. arg))
-         [:Integer] (Integer. arg)
          [:long] (long (Long. arg))
-         [:Long] (Long. arg)
          [:boolean] (boolean (Boolean. arg))
-         [:Boolean] (Boolean. arg)
          [:java.lang.String] arg
          :else (throw (IllegalArgumentException. (str "Unsupported argument type " type-name)))))
 

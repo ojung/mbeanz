@@ -5,28 +5,42 @@
             [ring.middleware.logger :refer [wrap-with-logger]]
             [compojure.core :refer :all]
             [mbeanz.core :refer :all]
-            [mbeanz.common :refer :all]))
+            [mbeanz.common :refer :all]
+            [environ.core :refer [env]]
+            [clojure.java.jmx :as jmx]))
+
+(def object-pattern (env :mbeanz-object-pattern))
+
+(def jmx-remote-host (env :mbeanz-jmx-remote-host))
+
+(def jmx-remote-port (Integer/parseInt (env :mbeanz-jmx-remote-port)))
 
 (defn- identifier-string [identifiers]
   (map #(str (:bean %) " " (stringify (:operation %))) identifiers))
 
 (defn- with-bean-and-operation [operation function]
   (fn [request]
-    (let [mbean (get-in request [:params :bean])]
-      (function mbean (keyword operation)))))
+    (jmx/with-connection {:host jmx-remote-host :port jmx-remote-port}
+      (let [mbean (get-in request [:params :bean])]
+        (doall (function mbean (keyword operation)))))))
 
 (defn- handle-invoke [operation]
   (fn [request]
-    (let [mbean (get-in request [:params :bean])]
-      (if-let [args (get-in request [:params :args])]
-        (apply invoke mbean (keyword operation) args)
-        (invoke mbean (keyword operation))))))
+    (jmx/with-connection {:host jmx-remote-host :port jmx-remote-port}
+      (let [mbean (get-in request [:params :bean])
+            args (get-in request [:params :args])]
+        (apply invoke mbean (keyword operation) args)))))
+
+(defn- handle-list-beans []
+  (fn [request]
+    (jmx/with-connection {:host jmx-remote-host :port jmx-remote-port}
+      (identifier-string (doall (list-beans object-pattern))))))
 
 (defroutes app-routes
-  (GET "/list" [] (identifier-string (list-beans "java.lang:*")))
+  (GET "/list" [] (handle-list-beans))
   (GET "/describe/:operation" [operation] (with-bean-and-operation operation describe))
   (GET "/parameters/:operation" [operation] (with-bean-and-operation operation get-params))
-  (GET "/invoke/:operation" [operation] {:body (handle-invoke operation)})
+  (GET "/invoke/:operation" [operation] (handle-invoke operation))
   (route/not-found "Not Found"))
 
 (def app
