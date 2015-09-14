@@ -46,13 +46,10 @@
     (is (= (stringify :int) "int"))
     (is (= (stringify :Boolean) "Boolean")))
   (testing "int"
-    (is (= (cast-type [:Integer "1"]) (Integer. 1)))
     (is (= (cast-type [:int "1"]) (int 1))))
   (testing "long"
-    (is (= (cast-type [:Long "1"]) (Long. 1)))
     (is (= (cast-type [:long "1"]) (long 1))))
   (testing "boolean"
-    (is (= (cast-type [:Boolean "true"]) (Boolean. true)))
     (is (= (cast-type [:boolean "true"]) (boolean true))))
   (testing "string"
     (is (= (cast-type [:java.lang.String "hello world"]) "hello world")))

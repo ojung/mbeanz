@@ -29,9 +29,9 @@
 
 (defn cast-type [[type-name arg]]
   (match [type-name]
-         [:int] (int (Integer. arg))
-         [:long] (long (Long. arg))
-         [:boolean] (boolean (Boolean. arg))
+         [:int] (int (Integer/parseInt arg))
+         [:long] (long (Long/parseLong arg))
+         [:boolean] (boolean (Boolean/parseBoolean arg))
          [:java.lang.String] arg
          :else (throw (IllegalArgumentException. (str "Unsupported argument type " type-name)))))
 
