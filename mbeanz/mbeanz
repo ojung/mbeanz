@@ -26,13 +26,13 @@ def get_arguments(signature):
     arguments = []
     for parameter in signature:
         print(parameter['name'] + ' (' + parameter['description'] + ')')
-        arguments.append(raw_input(parameter['type'] + ': '))
+        arguments.append(str(raw_input(parameter['type'] + ': ')))
     return arguments
 
 def invoke_operation(mbean, operation, arguments):
     query_parameters = {'bean': mbean, 'args': arguments}
     response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
-    print(response.text)
+    print(response.json()['result'])
 
 def main():
     mbean, operation = select_mbean()

@@ -28,8 +28,9 @@
   (fn [request]
     (jmx/with-connection {:host jmx-remote-host :port jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
-            args (get-in request [:params :args])]
-        (apply invoke mbean (keyword operation) args)))))
+            args (get-in request [:params :args])
+            result (invoke mbean (keyword operation) args)]
+        {:body {:result result} }))))
 
 (defn- handle-list-beans []
   (fn [request]
