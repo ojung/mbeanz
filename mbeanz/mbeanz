@@ -31,7 +31,8 @@ def get_arguments(signature):
 
 def invoke_operation(mbean, operation, arguments):
     query_parameters = {'bean': mbean, 'args': arguments}
-    requests.get(api_url + '/invoke/' + operation, params = query_parameters)
+    response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
+    print(response.text)
 
 def main():
     mbean, operation = select_mbean()
