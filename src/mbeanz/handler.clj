@@ -7,8 +7,8 @@
             [mbeanz.core :refer :all]
             [mbeanz.common :refer :all]
             [environ.core :refer [env]]
-            [clojure.java.jmx :as jmx]
-            [ring.adapter.jetty :refer [run-jetty]])
+            [clojure.java.jmx :as jmx])
+  (:use [org.httpkit.server :only [run-server]])
   (:import java.lang.management.ManagementFactory))
 
 (def object-pattern (delay (or (env :mbeanz-object-pattern) "*:*")))
@@ -54,4 +54,4 @@
       (wrap-defaults api-defaults)))
 
 (defn -main [& args]
-  (run-jetty app {:port 7999}))
+  (run-server app {:port 7999}))
