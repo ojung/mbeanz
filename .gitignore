@@ -7,3 +7,10 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
+
+/mbeanz/bin
+/mbeanz/lib
+/mbeanz/include
+/mbeanz/pip-selfcheck.json
+/mbeanz/Python
+mbeanz/.Python

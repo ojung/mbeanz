@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import requests
+import subprocess32
+
+api_url = 'http://localhost:7999'
+
+def get_mbeans():
+    response = requests.get(api_url + '/list')
+    mbeans = response.json()
+    return mbeans
+
+def select_mbean():
+    mbeans = str.join('\n', get_mbeans())
+    fzf = subprocess32.Popen('fzf', stdin = subprocess32.PIPE, stdout = subprocess32.PIPE)
+    mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(' ')
+    return tuple(mbean_operation)
+
+def describe_mbean(mbean, operation):
+    mbean_info = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean}).json()
+    description = mbean_info['description']
+    parameters = mbean_info['parameters']
+    return tuple([description, parameters])
+
+def get_arguments(signature):
+    arguments = []
+    for parameter in signature:
+        print(parameter['name'] + ' (' + parameter['description'] + ')')
+        arguments.append(str(raw_input(parameter['type'] + ': ')))
+    return arguments
+
+def invoke_operation(mbean, operation, arguments):
+    query_parameters = {'bean': mbean, 'args': arguments}
+    response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
+    print(response.json()['result'])
+
+def main():
+    mbean, operation = select_mbean()
+    description, signature = describe_mbean(mbean, operation)
+    print(description, end='\n')
+    arguments = get_arguments(signature)
+    invoke_operation(mbean, operation, arguments)
+
+main()
