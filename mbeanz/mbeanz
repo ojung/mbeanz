@@ -17,28 +17,47 @@ def select_mbean():
     mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(' ')
     return tuple(mbean_operation)
 
+def get_signature_string(index, description):
+    signature = description['signature']
+    params = [parameter['name'] + ' (' + parameter['type'] + ')' for parameter in signature]
+    return str(index) + ' ' + str.join(', ', params)
+
+def choose_signature(descriptions):
+    strings = [get_signature_string(i, descr) for i, descr in enumerate(descriptions)]
+    lines = str.join('\n', strings)
+    fzf = subprocess32.Popen('fzf', stdin = subprocess32.PIPE, stdout = subprocess32.PIPE)
+    index = fzf.communicate(lines)[0].split(' ')[0]
+    chosen = descriptions[int(index)]
+    return tuple([chosen['description'], chosen['signature']])
+
 def describe_mbean(mbean, operation):
-    mbean_info = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean}).json()
-    description = mbean_info['description']
-    parameters = mbean_info['parameters']
-    return tuple([description, parameters])
+    mbean_infos = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean}).json()
+    length = len(mbean_infos)
+    if (length == 1):
+        only_operation = mbean_infos[0]
+        return tuple([only_operation['description'], only_operation['signature']])
+    if (length >= 2):
+        return choose_signature(mbean_infos)
 
 def get_arguments(signature):
     arguments = []
     for parameter in signature:
-        print(parameter['name'] + ' (' + parameter['description'] + ')')
-        arguments.append(str(raw_input(parameter['type'] + ': ')))
+        print(parameter['description'])
+        user_input = raw_input(parameter['name'] + ' (' + parameter['type'] + '): ')
+        arguments.append(tuple([parameter['type'], user_input]))
     return arguments
 
 def invoke_operation(mbean, operation, arguments):
-    query_parameters = {'bean': mbean, 'args': arguments}
+    types = [arg[0] for arg in arguments]
+    values = [arg[1] for arg in arguments]
+    query_parameters = {'bean': mbean, 'args': values, 'types': types}
     response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
     print(response.json()['result'])
 
 def main():
     mbean, operation = select_mbean()
     description, signature = describe_mbean(mbean, operation)
-    print(description, end='\n')
+    print(description)
     arguments = get_arguments(signature)
     invoke_operation(mbean, operation, arguments)
 

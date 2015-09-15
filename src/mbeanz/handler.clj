@@ -25,17 +25,17 @@
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
             op (keyword operation)]
-        {:body (hash-map :description (doall (describe mbean op))
-                         :parameters (doall (get-params mbean op)))}))))
+        {:body (doall (describe mbean op))}))))
 
 (defn- handle-invoke [operation]
   (fn [request]
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
-            args (get-in request [:params :args])]
+            args (get-in request [:params :args])
+            types (get-in request [:params :types])]
         (if (string? args)
-          {:body {:result (invoke mbean (keyword operation) args)}}
-          {:body {:result (apply invoke mbean (keyword operation) args)}})))))
+          {:body {:result (invoke mbean (keyword operation) (list types args))}}
+          {:body {:result (apply invoke mbean (keyword operation) (map list types args))}})))))
 
 (defn- handle-list-beans []
   (fn [request]
