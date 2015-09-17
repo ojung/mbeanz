@@ -12,6 +12,7 @@
                  [ring/ring-defaults "0.1.2"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/data.json "0.2.6"]
+                 [clj-stacktrace "0.2.8"]
                  [environ "1.0.1"]]
   :plugins [[lein-ring "0.8.13"]
             [jonase/eastwood "0.2.1"]

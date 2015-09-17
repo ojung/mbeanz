@@ -1,10 +1,17 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+import json
 import requests
 import subprocess32
 
 api_url = 'http://localhost:7999'
+
+class colors:
+    OKGREEN = '\033[92m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
 
 def get_mbeans():
     response = requests.get(api_url + '/list')
@@ -42,7 +49,7 @@ def describe_mbean(mbean, operation):
 def get_arguments(signature):
     arguments = []
     for parameter in signature:
-        print(parameter['description'])
+        print(colors.BOLD + parameter['description'] + colors.ENDC, end = '\n')
         user_input = raw_input(parameter['name'] + ' (' + parameter['type'] + '): ')
         arguments.append(tuple([parameter['type'], user_input]))
     return arguments
@@ -52,13 +59,25 @@ def invoke_operation(mbean, operation, arguments):
     values = [arg[1] for arg in arguments]
     query_parameters = {'bean': mbean, 'args': values, 'types': types}
     response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
-    print(response.json()['result'])
+    return response.json()['result']
 
 def main():
     mbean, operation = select_mbean()
     description, signature = describe_mbean(mbean, operation)
-    print(description)
+    print(colors.BOLD + description + colors.ENDC, end = '\n')
+    print('')
     arguments = get_arguments(signature)
-    invoke_operation(mbean, operation, arguments)
+    result = invoke_operation(mbean, operation, arguments)
+    if (result):
+        try:
+            iterator = iter(result)
+        except TypeError:
+            print(colors.OKGREEN + str(result) + colors.ENDC)
+        else:
+            if ('error' in result):
+                print(colors.FAIL + result['error']['class'], end = '\n')
+                print(result['error']['message'] + colors.ENDC, end = '\n')
+            else:
+                print(colors.OKGREEN + result + colors.ENDC)
 
 main()
