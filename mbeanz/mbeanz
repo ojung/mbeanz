@@ -59,7 +59,7 @@ def invoke_operation(mbean, operation, arguments):
     values = [arg[1] for arg in arguments]
     query_parameters = {'bean': mbean, 'args': values, 'types': types}
     response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
-    return response.json()['result']
+    return response.json()
 
 def main():
     mbean, operation = select_mbean()
@@ -69,15 +69,10 @@ def main():
     arguments = get_arguments(signature)
     result = invoke_operation(mbean, operation, arguments)
     if (result):
-        try:
-            iterator = iter(result)
-        except TypeError:
-            print(colors.OKGREEN + str(result) + colors.ENDC)
+        if ('error' in result):
+            print(colors.FAIL + result['error']['class'], end = '\n')
+            print(result['error']['message'] + colors.ENDC, end = '\n')
         else:
-            if ('error' in result):
-                print(colors.FAIL + result['error']['class'], end = '\n')
-                print(result['error']['message'] + colors.ENDC, end = '\n')
-            else:
-                print(colors.OKGREEN + result + colors.ENDC)
+            print(result['result'])
 
 main()

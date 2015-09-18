@@ -26,13 +26,13 @@
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
             op (keyword operation)]
-        {:body (doall (describe mbean op))}))))
+        (doall (describe mbean op))))))
 
 (defn- try-invoke [mbean operation args types]
   (try
     (if (string? args)
-      (invoke mbean (keyword operation) (list types args))
-      (apply invoke mbean (keyword operation) (map list types args)))
+      {:result (invoke mbean (keyword operation) (list types args))}
+      {:result (apply invoke mbean (keyword operation) (map list types args))})
     (catch Exception exception
       (let [{:keys [message class]} (parse-exception exception)]
         {:error {:class (str class) :message message}}))))
@@ -43,7 +43,7 @@
       (let [mbean (get-in request [:params :bean])
             args (get-in request [:params :args])
             types (get-in request [:params :types])]
-        {:body {:result (try-invoke mbean operation args types)}}))))
+        {:body (try-invoke mbean operation args types)}))))
 
 (defn- handle-list-beans []
   (fn [request]
