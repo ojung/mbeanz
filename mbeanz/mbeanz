@@ -61,18 +61,17 @@ def invoke_operation(mbean, operation, arguments):
     response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
     return response.json()
 
-def main():
+if __name__ == "__main__":
     mbean, operation = select_mbean()
     description, signature = describe_mbean(mbean, operation)
-    print(colors.BOLD + description + colors.ENDC, end = '\n')
-    print('')
+    print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
     arguments = get_arguments(signature)
     result = invoke_operation(mbean, operation, arguments)
     if (result):
         if ('error' in result):
-            print(colors.FAIL + result['error']['class'], end = '\n')
-            print(result['error']['message'] + colors.ENDC, end = '\n')
+            print()
+            print(colors.FAIL + result['error']['class'])
+            print(result['error']['message'] + colors.ENDC, end = '\n\n')
         else:
-            print(result['result'])
-
-main()
+            print()
+            print(result['result'], end = '\n\n')
