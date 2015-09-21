@@ -8,7 +8,8 @@
             [mbeanz.common :refer :all]
             [environ.core :refer [env]]
             [clojure.java.jmx :as jmx])
-  (:use [org.httpkit.server :only [run-server]])
+  (:use [org.httpkit.server :only [run-server]]
+        [clj-stacktrace.core :only [parse-exception]])
   (:import java.lang.management.ManagementFactory))
 
 (def object-pattern (delay (or (env :mbeanz-object-pattern) "*:*")))
@@ -25,17 +26,24 @@
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
             op (keyword operation)]
-        {:body (hash-map :description (doall (describe mbean op))
-                         :parameters (doall (get-params mbean op)))}))))
+        (doall (describe mbean op))))))
+
+(defn- try-invoke [mbean operation args types]
+  (try
+    (if (string? args)
+      {:result (invoke mbean (keyword operation) (list types args))}
+      {:result (apply invoke mbean (keyword operation) (map list types args))})
+    (catch Exception exception
+      (let [{:keys [message class]} (parse-exception exception)]
+        {:error {:class (str class) :message message}}))))
 
 (defn- handle-invoke [operation]
   (fn [request]
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
       (let [mbean (get-in request [:params :bean])
-            args (get-in request [:params :args])]
-        (if (string? args)
-          {:body {:result (invoke mbean (keyword operation) args)}}
-          {:body {:result (apply invoke mbean (keyword operation) args)}})))))
+            args (get-in request [:params :args])
+            types (get-in request [:params :types])]
+        {:body (try-invoke mbean operation args types)}))))
 
 (defn- handle-list-beans []
   (fn [request]
