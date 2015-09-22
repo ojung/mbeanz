@@ -15,7 +15,6 @@ chmod +x $install_dir/start-mbeanz-api
 
 launchd_dir=/System/Library/LaunchDaemons
 cp $dir/mbeanz.plist $launchd_dir
-launchctl unload $launchd_dir/mbeanz.plist
 launchctl load $launchd_dir/mbeanz.plist
 
 pip install -r $dir/../mbeanz/requirements.txt
