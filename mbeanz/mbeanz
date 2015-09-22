@@ -5,7 +5,8 @@ import json
 import requests
 import subprocess32
 
-api_url = 'http://localhost:7999'
+port = [line.rstrip('\n') for line in open('/var/tmp/mbeanz.port')][0]
+api_url = 'http://localhost:' + port
 
 class colors:
     OKGREEN = '\033[92m'
