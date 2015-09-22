@@ -18,5 +18,5 @@ cp $dir/mbeanz.plist $launchd_dir
 launchctl unload $launchd_dir/mbeanz.plist
 launchctl load $launchd_dir/mbeanz.plist
 
-pip install -r $dir/requirements.txt
+pip install -r $dir/../mbeanz/requirements.txt
 cp $dir/../mbeanz/mbeanz /usr/local/bin
