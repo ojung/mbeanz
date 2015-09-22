@@ -7,7 +7,7 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [compojure "1.3.4"]
                  [ring.middleware.logger "0.5.0"]
-                 [http-kit "2.0.0"]
+                 [http-kit "2.1.17"]
                  [ring/ring-mock "0.3.0"]
                  [ring/ring-defaults "0.1.2"]
                  [ring/ring-json "0.4.0"]

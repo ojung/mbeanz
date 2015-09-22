@@ -1,0 +1,3 @@
+export MBEANZ_JMX_REMOTE_PORT=1234
+export MBEANZ_JMX_REMOTE_HOST=localhost
+export MBEANZ_OBJECT_PATTERN="java.lang:*"

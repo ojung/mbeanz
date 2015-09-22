@@ -6,11 +6,20 @@ Mbean search and execution util.
 
 Install `fzf` first: `brew install --HEAD fzf`
 
-`lein uberjar` the project
+then: `cd share && sudo install.sh`
 
-`cd mbeanz && pip install -r requirements.txt`
+You need to update the config to be able to search your mbeans:
+`sudo vim /etc/mbeanz/config`
 
-## Usage
+To have the api pick up the changes you need to restart it:
+```
+launchctl unload /System/Library/LaunchDaemons/mbeanz.plist
+launchctl load /System/Library/LaunchDaemons/mbeanz.plist
+```
+
+After giving it some seconds to start back up you should be able to start the fuzzy finder with `mbeanz`
+
+## Usage in development
 
 ### Run the server
 
@@ -22,11 +31,7 @@ export MBEANZ_JMX_REMOTE_PORT=11080
 ```
 
 Start the server
-`java -jar target/uberjar/mbeanz-0.1.0-SNAPSHOT-standalone.jar`
-
-### Use the client
-
-Either put `mbeanz/mbeanz` in your path or use it from the project root.
+`lein run`
 
 ## License
 
