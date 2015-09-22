@@ -12,6 +12,8 @@
         [clj-stacktrace.core :only [parse-exception]])
   (:import java.lang.management.ManagementFactory))
 
+(defonce server (atom nil))
+
 (def object-pattern (delay (or (env :mbeanz-object-pattern) "*:*")))
 
 (def jmx-remote-host (delay (or (env :mbeanz-jmx-remote-host) "localhost")))
@@ -62,4 +64,4 @@
       (wrap-defaults api-defaults)))
 
 (defn -main [& args]
-  (run-server app {:port 7999}))
+  (reset! server (run-server app {:port 0})))
