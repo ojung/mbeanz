@@ -13,4 +13,10 @@ mkdir -p $config_dir
 cp $dir/config $config_dir
 chmod +x $install_dir/start-mbeanz-api
 
-cp $dir/mbeanz.plist /System/Library/LaunchDaemons
+launchd_dir=/System/Library/LaunchDaemons
+cp $dir/mbeanz.plist $launchd_dir
+launchctl unload $launchd_dir/mbeanz.plist
+launchctl load $launchd_dir/mbeanz.plist
+
+pip install -r $dir/requirements.txt
+cp $dir/../mbeanz/mbeanz /usr/local/bin

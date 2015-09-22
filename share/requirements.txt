@@ -1,0 +1,2 @@
+requests==2.7.0
+subprocess32==3.2.6
