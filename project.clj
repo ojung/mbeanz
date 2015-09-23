@@ -12,13 +12,11 @@
                  [ring/ring-defaults "0.1.2"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [clj-stacktrace "0.2.8"]
-                 [environ "1.0.1"]]
+                 [clj-stacktrace "0.2.8"]]
   :plugins [[lein-ring "0.8.13"]
             [jonase/eastwood "0.2.1"]
             [lein-kibit "0.1.2"]
-            [lein-cloverage "1.0.6"]
-            [lein-environ "1.0.1"]]
+            [lein-cloverage "1.0.6"]]
   :ring {:handler mbeanz.handler/app}
   :main mbeanz.handler
   :target-path "target/%s"

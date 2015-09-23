@@ -3,7 +3,7 @@
 from __future__ import print_function
 import json
 import requests
-import subprocess32
+import subprocess
 
 port = [line.rstrip('\n') for line in open('/var/tmp/mbeanz.port')][0]
 api_url = 'http://localhost:' + port
@@ -21,7 +21,7 @@ def get_mbeans():
 
 def select_mbean():
     mbeans = str.join('\n', get_mbeans())
-    fzf = subprocess32.Popen('fzf', stdin = subprocess32.PIPE, stdout = subprocess32.PIPE)
+    fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(' ')
     return tuple(mbean_operation)
 
@@ -33,7 +33,7 @@ def get_signature_string(index, description):
 def choose_signature(descriptions):
     strings = [get_signature_string(i, descr) for i, descr in enumerate(descriptions)]
     lines = str.join('\n', strings)
-    fzf = subprocess32.Popen('fzf', stdin = subprocess32.PIPE, stdout = subprocess32.PIPE)
+    fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     index = fzf.communicate(lines)[0].split(' ')[0]
     chosen = descriptions[int(index)]
     return tuple([chosen['description'], chosen['signature']])
