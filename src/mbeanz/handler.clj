@@ -6,8 +6,8 @@
             [compojure.core :refer :all]
             [mbeanz.core :refer :all]
             [mbeanz.common :refer :all]
-            [environ.core :refer [env]]
-            [clojure.java.jmx :as jmx])
+            [clojure.java.jmx :as jmx]
+            [clojure.edn :as edn])
   (:use [org.httpkit.server :only [run-server]]
         [clj-stacktrace.core :only [parse-exception]]
         [clojure.java.io :only [writer]])
@@ -15,11 +15,11 @@
 
 (defonce server (atom nil))
 
-(def object-pattern (delay (or (env :mbeanz-object-pattern) "*:*")))
+(defonce object-pattern (atom "java.lang:*"))
 
-(def jmx-remote-host (delay (or (env :mbeanz-jmx-remote-host) "localhost")))
+(defonce jmx-remote-host (atom "localhost"))
 
-(def jmx-remote-port (delay (or (Integer/parseInt (env :mbeanz-jmx-remote-port)) 11080)))
+(defonce jmx-remote-port (atom 1080))
 
 (defn- identifier-string [identifiers]
   (map #(str (:bean %) " " (stringify (:operation %))) identifiers))
@@ -64,7 +64,16 @@
       (wrap-json-response)
       (wrap-defaults api-defaults)))
 
+(defn- reset-if-set [config key atom]
+  (when-let [value (key config)]
+    (reset! atom value)))
+
 (defn -main [& args]
+  (when-let [config-file-path (first args)]
+    (let [config (edn/read-string (slurp config-file-path))]
+      (reset-if-set config :object-pattern object-pattern)
+      (reset-if-set config :jmx-remote-host jmx-remote-host)
+      (reset-if-set config :jmx-remote-port jmx-remote-port)))
   (reset! server (run-server app {:port 0}))
   (with-open [my-writer (writer "/var/tmp/mbeanz.port")]
     (.write my-writer (str (:local-port (meta @server))))))

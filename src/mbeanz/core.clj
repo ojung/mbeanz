@@ -2,8 +2,7 @@
   (:gen-class)
   (:require [clojure.java.jmx :as jmx]
             [clojure.core.match :refer [match]]
-            [mbeanz.common :refer :all]
-            [environ.core :refer [env]])
+            [mbeanz.common :refer :all])
   (:import [java.lang.IllegalArgumentException]))
 
 (defn get-identifiers [[bean-name & bean-ops]]
