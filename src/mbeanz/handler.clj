@@ -9,8 +9,11 @@
             [environ.core :refer [env]]
             [clojure.java.jmx :as jmx])
   (:use [org.httpkit.server :only [run-server]]
-        [clj-stacktrace.core :only [parse-exception]])
+        [clj-stacktrace.core :only [parse-exception]]
+        [clojure.java.io :only [writer]])
   (:import java.lang.management.ManagementFactory))
+
+(defonce server (atom nil))
 
 (def object-pattern (delay (or (env :mbeanz-object-pattern) "*:*")))
 
@@ -62,4 +65,6 @@
       (wrap-defaults api-defaults)))
 
 (defn -main [& args]
-  (run-server app {:port 7999}))
+  (reset! server (run-server app {:port 0}))
+  (with-open [my-writer (writer "/var/tmp/mbeanz.port")]
+    (.write my-writer (str (:local-port (meta @server))))))
