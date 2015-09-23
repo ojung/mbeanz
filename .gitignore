@@ -14,3 +14,4 @@ pom.xml.asc
 /mbeanz/pip-selfcheck.json
 /mbeanz/Python
 mbeanz/.Python
+/dist
