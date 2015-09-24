@@ -4,9 +4,13 @@ from __future__ import print_function
 import json
 import requests
 import subprocess
+import signal
+import sys
 
 port = [line.rstrip('\n') for line in open('/var/tmp/mbeanz.port')][0]
 api_url = 'http://localhost:' + port
+
+signal.signal(signal.SIGINT, lambda x,y: sys.exit(0))
 
 class colors:
     OKGREEN = '\033[92m'
