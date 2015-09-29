@@ -7,8 +7,9 @@ import subprocess
 import signal
 import sys
 
-port = [line.rstrip('\n') for line in open('/var/tmp/mbeanz.port')][0]
-api_url = 'http://localhost:' + port
+PORT = [line.rstrip('\n') for line in open('/var/tmp/mbeanz.port')][0]
+API_URL = 'http://localhost:' + PORT
+SEPARATOR = '  '
 
 signal.signal(signal.SIGINT, lambda x,y: sys.exit(0))
 
@@ -19,14 +20,14 @@ class colors:
     BOLD = '\033[1m'
 
 def get_mbeans():
-    response = requests.get(api_url + '/list')
+    response = requests.get(API_URL + '/list')
     mbeans = response.json()
-    return mbeans
+    return [mbean['bean'] + SEPARATOR + mbean['operation'] for mbean in mbeans]
 
 def select_mbean():
     mbeans = str.join('\n', get_mbeans())
     fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-    mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(' ')
+    mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(SEPARATOR)
     return tuple(mbean_operation)
 
 def get_signature_string(index, description):
@@ -43,7 +44,7 @@ def choose_signature(descriptions):
     return tuple([chosen['description'], chosen['signature']])
 
 def describe_mbean(mbean, operation):
-    mbean_infos = requests.get(api_url + '/describe/' + operation, params = {'bean': mbean}).json()
+    mbean_infos = requests.get(API_URL + '/describe/' + operation, params = {'bean': mbean}).json()
     length = len(mbean_infos)
     if (length == 1):
         only_operation = mbean_infos[0]
@@ -63,7 +64,7 @@ def invoke_operation(mbean, operation, arguments):
     types = [arg[0] for arg in arguments]
     values = [arg[1] for arg in arguments]
     query_parameters = {'bean': mbean, 'args': values, 'types': types}
-    response = requests.get(api_url + '/invoke/' + operation, params = query_parameters)
+    response = requests.get(API_URL + '/invoke/' + operation, params = query_parameters)
     return response.json()
 
 if __name__ == "__main__":

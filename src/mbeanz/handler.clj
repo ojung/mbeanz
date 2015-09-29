@@ -51,7 +51,7 @@
 (defn- handle-list-beans []
   (fn [request]
     (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
-      (identifier-string (doall (list-beans @object-pattern))))))
+      (doall (list-beans @object-pattern)))))
 
 (defroutes app-routes
   (GET "/list" [] (handle-list-beans))
