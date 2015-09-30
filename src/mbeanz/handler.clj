@@ -3,9 +3,9 @@
   (:require [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer :all]
             [mbeanz.core :refer :all]
-            [mbeanz.common :refer :all]
             [clojure.java.jmx :as jmx]
             [clojure.edn :as edn])
   (:use [org.httpkit.server :only [run-server]]
@@ -20,9 +20,6 @@
 (defonce jmx-remote-host (atom "localhost"))
 
 (defonce jmx-remote-port (atom 1080))
-
-(defn- identifier-string [identifiers]
-  (map #(str (:bean %) " " (stringify (:operation %))) identifiers))
 
 (defn- handle-describe [operation]
   (fn [request]
@@ -61,6 +58,7 @@
 
 (def app
   (-> app-routes
+      (wrap-reload)
       (wrap-json-response)
       (wrap-defaults api-defaults)))
 

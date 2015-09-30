@@ -10,6 +10,7 @@
                  [http-kit "2.1.17"]
                  [ring/ring-mock "0.3.0"]
                  [ring/ring-defaults "0.1.2"]
+                 [ring/ring-devel "1.4.0"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/data.json "0.2.6"]
                  [clj-stacktrace "0.2.8"]]
