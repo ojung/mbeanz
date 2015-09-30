@@ -6,7 +6,6 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer :all]
             [mbeanz.core :refer :all]
-            [mbeanz.common :refer :all]
             [clojure.java.jmx :as jmx]
             [clojure.edn :as edn])
   (:use [org.httpkit.server :only [run-server]]
@@ -21,9 +20,6 @@
 (defonce jmx-remote-host (atom "localhost"))
 
 (defonce jmx-remote-port (atom 1080))
-
-(defn- identifier-string [identifiers]
-  (map #(str (:bean %) " " (stringify (:operation %))) identifiers))
 
 (defn- handle-describe [operation]
   (fn [request]

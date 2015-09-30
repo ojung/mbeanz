@@ -1,8 +1,7 @@
 (ns mbeanz.core
   (:gen-class)
   (:require [clojure.java.jmx :as jmx]
-            [clojure.core.match :refer [match]]
-            [mbeanz.common :refer :all])
+            [clojure.core.match :refer [match]])
   (:import [java.lang.IllegalArgumentException]))
 
 (defn get-identifiers [[bean-name & bean-ops]]
