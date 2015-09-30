@@ -15,15 +15,16 @@
 
 (defonce server (atom nil))
 
-(defonce object-pattern (atom "java.lang:*"))
+(defonce config (atom {:object-pattern "java.lang:*"
+                       :jmx-remote-host "localhost"
+                       :jmx-remote-port 11080}))
 
-(defonce jmx-remote-host (atom "localhost"))
-
-(defonce jmx-remote-port (atom 1080))
+(defn- get-connection-map []
+  {:host (:jmx-remote-host @config) :port (:jmx-remote-port @config)})
 
 (defn- handle-describe [operation]
   (fn [request]
-    (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
+    (jmx/with-connection (get-connection-map)
       (let [mbean (get-in request [:params :bean])
             op (keyword operation)]
         (doall (describe mbean op))))))
@@ -39,7 +40,7 @@
 
 (defn- handle-invoke [operation]
   (fn [request]
-    (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
+    (jmx/with-connection (get-connection-map)
       (let [mbean (get-in request [:params :bean])
             args (get-in request [:params :args])
             types (get-in request [:params :types])]
@@ -47,8 +48,8 @@
 
 (defn- handle-list-beans []
   (fn [request]
-    (jmx/with-connection {:host @jmx-remote-host :port @jmx-remote-port}
-      (doall (list-beans @object-pattern)))))
+    (jmx/with-connection (get-connection-map)
+      (doall (list-beans (:object-pattern @config))))))
 
 (defroutes app-routes
   (GET "/list" [] (handle-list-beans))
@@ -62,16 +63,9 @@
       (wrap-json-response)
       (wrap-defaults api-defaults)))
 
-(defn- reset-if-set [config key atom]
-  (when-let [value (key config)]
-    (reset! atom value)))
-
 (defn -main [& args]
-  (when-let [config-file-path (first args)]
-    (let [config (edn/read-string (slurp config-file-path))]
-      (reset-if-set config :object-pattern object-pattern)
-      (reset-if-set config :jmx-remote-host jmx-remote-host)
-      (reset-if-set config :jmx-remote-port jmx-remote-port)))
+  (when-let [config-path (first args)]
+    (reset! config (edn/read-string (slurp config-path))))
   (reset! server (run-server app {:port 0}))
   (with-open [my-writer (writer "/var/tmp/mbeanz.port")]
     (.write my-writer (str (:local-port (meta @server))))))
