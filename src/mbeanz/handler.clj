@@ -3,6 +3,7 @@
   (:require [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer :all]
             [mbeanz.core :refer :all]
             [mbeanz.common :refer :all]
@@ -61,6 +62,7 @@
 
 (def app
   (-> app-routes
+      (wrap-reload)
       (wrap-json-response)
       (wrap-defaults api-defaults)))
 
