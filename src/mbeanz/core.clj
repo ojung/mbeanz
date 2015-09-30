@@ -8,6 +8,7 @@
 (defn get-identifiers [[bean-name & bean-ops]]
   (->> bean-ops
        (flatten)
+       (sort)
        (map (partial hash-map :bean (str bean-name) :operation))))
 
 (defn list-beans [object-name-pattern]
