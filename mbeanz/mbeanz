@@ -21,8 +21,10 @@ class colors:
 
 def get_mbeans(profile):
     response = requests.get(API_URL + '/' + profile + '/list')
-    mbeans = response.json()
-    return [mbean['bean'] + SEPARATOR + mbean['operation'] for mbean in mbeans]
+    result = response.json()
+    if ('error' in result):
+        raise(Exception(result['error']['message']))
+    return [mbean['bean'] + SEPARATOR + mbean['operation'] for mbean in result]
 
 def select_mbean(profile):
     mbeans = str.join('\n', get_mbeans(profile))
@@ -70,17 +72,20 @@ def invoke_operation(profile, mbean, operation, arguments):
     return response.json()
 
 if __name__ == "__main__":
-    profile = sys.argv[1]
-    mbean, operation = select_mbean(profile)
-    description, signature = describe_mbean(profile, mbean, operation)
-    print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
-    arguments = get_arguments(signature)
-    result = invoke_operation(profile, mbean, operation, arguments)
-    if (result):
-        if ('error' in result):
-            print()
-            print(colors.FAIL + result['error']['class'])
-            print(result['error']['message'] + colors.ENDC, end = '\n\n')
-        else:
-            print()
-            print(result['result'], end = '\n\n')
+    try:
+        profile = sys.argv[1]
+        mbean, operation = select_mbean(profile)
+        description, signature = describe_mbean(profile, mbean, operation)
+        print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
+        arguments = get_arguments(signature)
+        result = invoke_operation(profile, mbean, operation, arguments)
+        if (result):
+            if ('error' in result):
+                print()
+                print(colors.FAIL + result['error']['class'])
+                print(result['error']['message'] + colors.ENDC, end = '\n\n')
+            else:
+                print()
+                print(result['result'], end = '\n\n')
+    except IndexError:
+        print('usage: mbeanz <profile name>\nProfiles defined in /usr/local/etc/mbeanz.edn')
