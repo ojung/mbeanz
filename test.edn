@@ -1,0 +1,6 @@
+{:local {:object-pattern "Adscale:*"
+         :jmx-remote-host "localhost"
+         :jmx-remote-port 11080}
+ :kafka {:object-pattern "kafka:*"
+         :jmx-remote-host "localhost"
+         :jmx-remote-port 11080}}

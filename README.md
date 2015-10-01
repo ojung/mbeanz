@@ -4,29 +4,19 @@ Mbean search and execution util.
 
 ## Installation
 
-Install `fzf` first: `brew install --HEAD fzf`
+latest stable:
+```
+brew install ojung/mbeanz/mbeanz
+```
 
-`lein uberjar` the project
-
-`cd mbeanz && pip install -r requirements.txt`
+adjust the config to your needs:
+```
+vim /usr/local/etc/mbeanz.conf
+```
 
 ## Usage
 
-### Run the server
-
-Configure:
-```
-export MBEANZ_OBJECT_PATTERN="MyBeanz:*"
-export MBEANZ_JMX_REMOTE_HOST="localhost"
-export MBEANZ_JMX_REMOTE_PORT=11080
-```
-
-Start the server
-`java -jar target/uberjar/mbeanz-0.1.0-SNAPSHOT-standalone.jar`
-
-### Use the client
-
-Either put `mbeanz/mbeanz` in your path or use it from the project root.
+`mbeanz <profile>` where profile is one of the profiles defined in `/usr/local/etc/mbeanz.conf`
 
 ## License
 

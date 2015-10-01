@@ -19,13 +19,13 @@ class colors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
 
-def get_mbeans():
-    response = requests.get(API_URL + '/list')
+def get_mbeans(profile):
+    response = requests.get(API_URL + '/' + profile + '/list')
     mbeans = response.json()
     return [mbean['bean'] + SEPARATOR + mbean['operation'] for mbean in mbeans]
 
-def select_mbean():
-    mbeans = str.join('\n', get_mbeans())
+def select_mbean(profile):
+    mbeans = str.join('\n', get_mbeans(profile))
     fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(SEPARATOR)
     return tuple(mbean_operation)
@@ -43,8 +43,9 @@ def choose_signature(descriptions):
     chosen = descriptions[int(index)]
     return tuple([chosen['description'], chosen['signature']])
 
-def describe_mbean(mbean, operation):
-    mbean_infos = requests.get(API_URL + '/describe/' + operation, params = {'bean': mbean}).json()
+def describe_mbean(profile, mbean, operation):
+    mbean_infos = requests.get(API_URL + '/' + profile + '/describe/' + operation,
+            params = {'bean': mbean}).json()
     length = len(mbean_infos)
     if (length == 1):
         only_operation = mbean_infos[0]
@@ -60,19 +61,21 @@ def get_arguments(signature):
         arguments.append(tuple([parameter['type'], user_input]))
     return arguments
 
-def invoke_operation(mbean, operation, arguments):
+def invoke_operation(profile, mbean, operation, arguments):
     types = [arg[0] for arg in arguments]
     values = [arg[1] for arg in arguments]
     query_parameters = {'bean': mbean, 'args': values, 'types': types}
-    response = requests.get(API_URL + '/invoke/' + operation, params = query_parameters)
+    response = requests.get(API_URL + '/' + profile + '/invoke/' + operation,
+            params = query_parameters)
     return response.json()
 
 if __name__ == "__main__":
-    mbean, operation = select_mbean()
-    description, signature = describe_mbean(mbean, operation)
+    profile = sys.argv[1]
+    mbean, operation = select_mbean(profile)
+    description, signature = describe_mbean(profile, mbean, operation)
     print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
     arguments = get_arguments(signature)
-    result = invoke_operation(mbean, operation, arguments)
+    result = invoke_operation(profile, mbean, operation, arguments)
     if (result):
         if ('error' in result):
             print()
