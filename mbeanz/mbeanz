@@ -81,11 +81,9 @@ if __name__ == "__main__":
         result = invoke_operation(profile, mbean, operation, arguments)
         if (result):
             if ('error' in result):
-                print()
-                print(colors.FAIL + result['error']['class'])
+                print('\n' + colors.FAIL + result['error']['class'])
                 print(result['error']['message'] + colors.ENDC, end = '\n\n')
             else:
-                print()
-                print(result['result'], end = '\n\n')
+                print('\n' + str(result['result']), end = '\n\n')
     except IndexError:
         print('usage: mbeanz <profile name>\nProfiles defined in /usr/local/etc/mbeanz.edn')
