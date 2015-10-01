@@ -11,12 +11,12 @@ brew install ojung/mbeanz/mbeanz
 
 adjust the config to your needs:
 ```
-vim /usr/local/etc/mbeanz.conf
+vim /usr/local/etc/mbeanz.edn
 ```
 
 ## Usage
 
-`mbeanz <profile>` where profile is one of the profiles defined in `/usr/local/etc/mbeanz.conf`
+`mbeanz <profile>` where profile is one of the profiles defined in `/usr/local/etc/mbeanz.edn`
 
 ## License
 
