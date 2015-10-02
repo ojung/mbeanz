@@ -56,7 +56,8 @@ def describe_mbean(profile, mbean, operation):
     if (length >= 2):
         return choose_signature(mbean_infos)
 
-def get_arguments(signature):
+def get_arguments(description, signature):
+    print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
     arguments = []
     for parameter in signature:
         print(colors.BOLD + parameter['description'] + colors.ENDC, end = '\n')
@@ -72,19 +73,35 @@ def invoke_operation(profile, mbean, operation, arguments):
             params = query_parameters)
     return response.json()
 
+def print_result(result):
+    if (result):
+        if ('error' in result):
+            print('\n' + colors.FAIL + result['error']['class'])
+            print(result['error']['message'] + colors.ENDC, end = '\n\n')
+        else:
+            print('\n' + str(result['result']), end = '\n\n')
+
+def print_usage():
+    print('usage: mbeanz <profile name>')
+    print('profiles are defined in /usr/local/etc/mbeanz.edn')
+
+def get_profile(args):
+    first = args[1]
+    if (first == '--help' or first == '-h'):
+        print_usage()
+        sys.exit(0)
+    return first
+
 if __name__ == "__main__":
     try:
-        profile = sys.argv[1]
+        profile = get_profile(sys.argv)
         mbean, operation = select_mbean(profile)
         description, signature = describe_mbean(profile, mbean, operation)
-        print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
-        arguments = get_arguments(signature)
+        arguments = get_arguments(description, signature)
         result = invoke_operation(profile, mbean, operation, arguments)
-        if (result):
-            if ('error' in result):
-                print('\n' + colors.FAIL + result['error']['class'])
-                print(result['error']['message'] + colors.ENDC, end = '\n\n')
-            else:
-                print('\n' + str(result['result']), end = '\n\n')
-    except IndexError:
-        print('usage: mbeanz <profile name>\nProfiles defined in /usr/local/etc/mbeanz.edn')
+        print_result(result)
+    except Exception as exception:
+        if ('--debug' in sys.argv):
+            raise(exception)
+        if (not exception.message == ''):
+            print(exception.message)
