@@ -74,12 +74,11 @@ def invoke_operation(profile, mbean, operation, arguments):
     return response.json()
 
 def print_result(result):
-    if (result):
-        if ('error' in result):
-            print('\n' + colors.FAIL + result['error']['class'])
-            print(result['error']['message'] + colors.ENDC, end = '\n\n')
-        else:
-            print('\n' + str(result['result']), end = '\n\n')
+    if ('error' in result):
+        print('\n' + colors.FAIL + result['error']['class'])
+        print(result['error']['message'] + colors.ENDC, end = '\n\n')
+    else:
+        print('\n' + str(result['result']), end = '\n\n')
 
 def print_usage():
     print('usage: mbeanz <profile name>')
