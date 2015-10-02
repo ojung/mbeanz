@@ -26,10 +26,13 @@ def get_mbeans(profile):
         raise(Exception(result['error']['message']))
     return [mbean['bean'] + SEPARATOR + mbean['operation'] for mbean in result]
 
+def fzf(stdin):
+    fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+    return fzf.communicate(stdin)[0]
+
 def select_mbean(profile):
     mbeans = str.join('\n', get_mbeans(profile))
-    fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-    mbean_operation = fzf.communicate(mbeans)[0].rstrip('\n').split(SEPARATOR)
+    mbean_operation = fzf(mbeans).rstrip('\n').split(SEPARATOR)
     return tuple(mbean_operation)
 
 def get_signature_string(index, description):
@@ -38,10 +41,8 @@ def get_signature_string(index, description):
     return str(index) + ' ' + str.join(', ', params)
 
 def choose_signature(descriptions):
-    strings = [get_signature_string(i, descr) for i, descr in enumerate(descriptions)]
-    lines = str.join('\n', strings)
-    fzf = subprocess.Popen('fzf', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-    index = fzf.communicate(lines)[0].split(' ')[0]
+    strings = '\n'.join([get_signature_string(i, descr) for i, descr in enumerate(descriptions)])
+    index = fzf(strings).split(' ')[0]
     chosen = descriptions[int(index)]
     return tuple([chosen['description'], chosen['signature']])
 
@@ -55,7 +56,8 @@ def describe_mbean(profile, mbean, operation):
     if (length >= 2):
         return choose_signature(mbean_infos)
 
-def get_arguments(signature):
+def get_arguments(description, signature):
+    print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
     arguments = []
     for parameter in signature:
         print(colors.BOLD + parameter['description'] + colors.ENDC, end = '\n')
@@ -71,19 +73,34 @@ def invoke_operation(profile, mbean, operation, arguments):
             params = query_parameters)
     return response.json()
 
+def print_result(result):
+    if ('error' in result):
+        print('\n' + colors.FAIL + result['error']['class'])
+        print(result['error']['message'] + colors.ENDC, end = '\n\n')
+    else:
+        print('\n' + str(result['result']), end = '\n\n')
+
+def print_usage():
+    print('usage: mbeanz <profile name>')
+    print('profiles are defined in /usr/local/etc/mbeanz.edn')
+
+def get_profile(args):
+    first = args[1]
+    if (first == '--help' or first == '-h'):
+        print_usage()
+        sys.exit(0)
+    return first
+
 if __name__ == "__main__":
     try:
-        profile = sys.argv[1]
+        profile = get_profile(sys.argv)
         mbean, operation = select_mbean(profile)
         description, signature = describe_mbean(profile, mbean, operation)
-        print(colors.BOLD + '\n' + description + colors.ENDC, end = '\n\n')
-        arguments = get_arguments(signature)
+        arguments = get_arguments(description, signature)
         result = invoke_operation(profile, mbean, operation, arguments)
-        if (result):
-            if ('error' in result):
-                print('\n' + colors.FAIL + result['error']['class'])
-                print(result['error']['message'] + colors.ENDC, end = '\n\n')
-            else:
-                print('\n' + str(result['result']), end = '\n\n')
-    except IndexError:
-        print('usage: mbeanz <profile name>\nProfiles defined in /usr/local/etc/mbeanz.edn')
+        print_result(result)
+    except Exception as exception:
+        if ('--debug' in sys.argv):
+            raise(exception)
+        if (not exception.message == ''):
+            print(exception.message)
