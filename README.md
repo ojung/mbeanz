@@ -2,6 +2,9 @@
 
 Mbean search and execution util.
 
+![mbeanz in action]
+(https://raw.githubusercontent.com/ojung/mbeanz/master/share/mbeanz.gif)
+
 ## Installation
 
 latest stable:
