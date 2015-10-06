@@ -4,18 +4,16 @@
             [clojure.core.match :refer [match]])
   (:import [java.lang.IllegalArgumentException]))
 
-(defn get-identifiers [[bean-name & bean-ops]]
+(defn get-identifiers [[bean-name bean-ops]]
   (->> bean-ops
-       (flatten)
        (sort)
        (map (partial hash-map :bean (str bean-name) :operation))))
 
 (defn list-beans [object-name-pattern]
   (->> (jmx/mbean-names object-name-pattern)
        (sort)
-       (map (comp get-identifiers
-                  #(list % (map first (partition-by identity (jmx/operation-names %))))))
-       (flatten)))
+       (mapcat (comp get-identifiers
+                     #(list % (map first (partition-by identity (jmx/operation-names %))))))))
 
 (defn- get-operation-info [bean-name operation]
   (filter #(= (-> % .getName keyword) operation) (jmx/operations bean-name)))
