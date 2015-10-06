@@ -2,6 +2,8 @@
 
 Mbean search and execution util.
 
+Uses [fzf](https://github.com/junegunn/fzf). 👍
+
 ![mbeanz in action]
 (https://raw.githubusercontent.com/ojung/mbeanz/master/share/mbeanz.gif)
 
