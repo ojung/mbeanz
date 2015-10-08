@@ -1,6 +1,7 @@
 (ns mbeanz.handler-test
   (:require [clojure.test :refer :all]
             [mbeanz.handler :refer :all]
+            [mbeanz.config :refer [config get-connection-map]]
             [ring.mock.request :as mock]
             [clojure.data.json :as json]))
 
@@ -15,7 +16,7 @@
         response (app mock-request)]
     (cb response)))
 
-(deftest unit-tests
+(deftest config-test
   (testing "get-connection-map"
     (is (= (get-connection-map :default) {:host "localhost" :port 11080}))))
 

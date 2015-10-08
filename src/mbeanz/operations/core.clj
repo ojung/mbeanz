@@ -1,4 +1,4 @@
-(ns mbeanz.core
+(ns mbeanz.operations.core
   (:gen-class)
   (:require [clojure.java.jmx :as jmx]
             [clojure.core.match :refer [match]])

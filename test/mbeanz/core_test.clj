@@ -1,6 +1,6 @@
 (ns mbeanz.core-test
   (:require [clojure.test :refer :all]
-            [mbeanz.core :refer :all])
+            [mbeanz.operations.core :refer :all])
   (:import [java.lang.IllegalArgumentException]))
 
 (deftest test-list-beans
