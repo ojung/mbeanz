@@ -1,4 +1,4 @@
-(ns mbeanz.core
+(ns mbeanz.operations.core
   (:gen-class)
   (:require [clojure.java.jmx :as jmx]
             [clojure.core.match :refer [match]])
@@ -9,7 +9,7 @@
        (sort)
        (map (partial hash-map :bean (str bean-name) :operation))))
 
-(defn list-beans [object-name-pattern]
+(defn list-operations [object-name-pattern]
   (->> (jmx/mbean-names object-name-pattern)
        (sort)
        (mapcat (comp get-identifiers

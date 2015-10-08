@@ -1,13 +1,14 @@
-(ns mbeanz.core-test
+(ns mbeanz.operations.core-test
   (:require [clojure.test :refer :all]
-            [mbeanz.core :refer :all])
+            [mbeanz.operations.core :refer :all])
   (:import [java.lang.IllegalArgumentException]))
 
-(deftest test-list-beans
+(deftest test-list-operations
   (testing "list single mbean"
-    (is (= (list-beans "java.lang:type=Memory") [{:bean "java.lang:type=Memory" :operation :gc}])))
+    (is (= (list-operations "java.lang:type=Memory")
+           [{:bean "java.lang:type=Memory" :operation :gc}])))
   (testing "list multiple mbeans"
-    (is (= (list-beans "java.lang:type=MemoryPool,name=*")
+    (is (= (list-operations "java.lang:type=MemoryPool,name=*")
            [{:bean "java.lang:type=MemoryPool,name=Code Cache" :operation :resetPeakUsage}
             {:bean "java.lang:type=MemoryPool,name=Compressed Class Space"
              :operation :resetPeakUsage}
