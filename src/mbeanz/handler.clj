@@ -1,25 +1,39 @@
 (ns mbeanz.handler
   (:gen-class)
-  (:require [compojure.route :as route]
+  (:require [mbeanz.config :refer [get-connection-map get-object-pattern]]
+            [mbeanz.operations.handler :refer :all]
+            [mbeanz.operations.core :refer [list-operations]]
+            [mbeanz.attributes.core :refer [list-attributes]]
+            [mbeanz.attributes.handler :refer :all]
+            [mbeanz.config :refer [config]]
+            [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer :all]
-            [mbeanz.operations.handler :refer :all]
-            [mbeanz.config :refer [config]]
-            [clojure.edn :as edn])
+            [clojure.edn :as edn]
+            [clojure.java.jmx :as jmx])
   (:use [org.httpkit.server :only [run-server]]
         [clj-stacktrace.core :only [parse-exception]]
         [clojure.java.io :only [writer]]))
 
 (defonce server (atom nil))
 
+(defn handle-list [config-name]
+  (fn [request]
+    (jmx/with-connection (get-connection-map config-name)
+      (let [pattern (get-object-pattern config-name)]
+        (concat (doall (list-operations pattern))
+                (doall (list-attributes pattern)))))))
+
 (defroutes app-routes
-  (GET "/:config/list" [config] (handle-list-beans (keyword config)))
+  (GET "/:config/list" [config] (handle-list (keyword config)))
   (GET "/:config/describe/:operation"
        [config operation]
        (handle-describe (keyword config) operation))
   (GET "/:config/invoke/:operation" [config operation] (handle-invoke (keyword config) operation))
+  (GET "/:config/read/:attribute" [config attribute] (handle-read (keyword config) attribute))
+  (GET "/:config/write/:attribute" [config attribute] (handle-write (keyword config) attribute))
   (route/not-found "Not Found"))
 
 (defn- get-error-response [exception]

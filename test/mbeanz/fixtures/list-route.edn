@@ -1,0 +1,197 @@
+[{"bean" "java.lang:type=Memory", "operation" "gc"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "operation" "resetPeakUsage"}
+ {"bean" "java.lang:type=Threading", "operation" "dumpAllThreads"}
+ {"bean" "java.lang:type=Threading", "operation" "findDeadlockedThreads"}
+ {"bean" "java.lang:type=Threading", "operation" "findMonitorDeadlockedThreads"}
+ {"bean" "java.lang:type=Threading", "operation" "getThreadAllocatedBytes"}
+ {"bean" "java.lang:type=Threading", "operation" "getThreadCpuTime"}
+ {"bean" "java.lang:type=Threading", "operation" "getThreadInfo"}
+ {"bean" "java.lang:type=Threading", "operation" "getThreadUserTime"}
+ {"bean" "java.lang:type=Threading", "operation" "resetPeakThreadCount"}
+ {"bean" "java.lang:type=ClassLoading", "attribute" "LoadedClassCount"}
+ {"bean" "java.lang:type=ClassLoading", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=ClassLoading", "attribute" "TotalLoadedClassCount"}
+ {"bean" "java.lang:type=ClassLoading", "attribute" "UnloadedClassCount"}
+ {"bean" "java.lang:type=ClassLoading", "attribute" "Verbose"}
+ {"bean" "java.lang:type=Compilation", "attribute" "CompilationTimeMonitoringSupported"}
+ {"bean" "java.lang:type=Compilation", "attribute" "Name"}
+ {"bean" "java.lang:type=Compilation", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=Compilation", "attribute" "TotalCompilationTime"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "CollectionCount"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "CollectionTime"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "LastGcInfo"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "MemoryPoolNames"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "Name"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS MarkSweep", "attribute" "Valid"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "CollectionCount"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "CollectionTime"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "LastGcInfo"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "MemoryPoolNames"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "Name"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=GarbageCollector,name=PS Scavenge", "attribute" "Valid"}
+ {"bean" "java.lang:type=Memory", "attribute" "HeapMemoryUsage"}
+ {"bean" "java.lang:type=Memory", "attribute" "NonHeapMemoryUsage"}
+ {"bean" "java.lang:type=Memory", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=Memory", "attribute" "ObjectPendingFinalizationCount"}
+ {"bean" "java.lang:type=Memory", "attribute" "Verbose"}
+ {"bean" "java.lang:type=MemoryManager,name=CodeCacheManager", "attribute" "MemoryPoolNames"}
+ {"bean" "java.lang:type=MemoryManager,name=CodeCacheManager", "attribute" "Name"}
+ {"bean" "java.lang:type=MemoryManager,name=CodeCacheManager", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=MemoryManager,name=CodeCacheManager", "attribute" "Valid"}
+ {"bean" "java.lang:type=MemoryManager,name=Metaspace Manager", "attribute" "MemoryPoolNames"}
+ {"bean" "java.lang:type=MemoryManager,name=Metaspace Manager", "attribute" "Name"}
+ {"bean" "java.lang:type=MemoryManager,name=Metaspace Manager", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=MemoryManager,name=Metaspace Manager", "attribute" "Valid"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "CollectionUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "CollectionUsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "CollectionUsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "CollectionUsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "CollectionUsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "MemoryManagerNames"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "Name"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "PeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "Type"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "Usage"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "UsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "UsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "UsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "UsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Code Cache", "attribute" "Valid"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "CollectionUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "CollectionUsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "CollectionUsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "CollectionUsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "CollectionUsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "MemoryManagerNames"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "Name"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "PeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "Type"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "Usage"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "UsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "UsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "UsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "UsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space", "attribute" "Valid"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "CollectionUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "CollectionUsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "CollectionUsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "CollectionUsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "CollectionUsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "MemoryManagerNames"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "Name"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "ObjectName"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "PeakUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "Type"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "Usage"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "UsageThreshold"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "UsageThresholdCount"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "UsageThresholdExceeded"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "UsageThresholdSupported"}
+ {"bean" "java.lang:type=MemoryPool,name=Metaspace", "attribute" "Valid"}
+ {"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "CollectionUsage"}
+ {"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "CollectionUsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "CollectionUsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "CollectionUsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "CollectionUsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "MemoryManagerNames"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "Name"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "ObjectName"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "PeakUsage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "Type"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "Usage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "UsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "UsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "UsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "UsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "attribute" "Valid"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "CollectionUsage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "CollectionUsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "CollectionUsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "CollectionUsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "CollectionUsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "MemoryManagerNames"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "Name"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "ObjectName"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "PeakUsage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "Type"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "Usage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "UsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "UsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "UsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "UsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "attribute" "Valid"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "CollectionUsage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "CollectionUsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "CollectionUsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "CollectionUsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "CollectionUsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "MemoryManagerNames"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "Name"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "ObjectName"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "PeakUsage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "Type"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "Usage"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "UsageThreshold"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "UsageThresholdCount"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "UsageThresholdExceeded"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "UsageThresholdSupported"}
+{"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "attribute" "Valid"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "Arch"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "AvailableProcessors"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "CommittedVirtualMemorySize"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "FreePhysicalMemorySize"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "FreeSwapSpaceSize"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "MaxFileDescriptorCount"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "Name"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "ObjectName"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "OpenFileDescriptorCount"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "ProcessCpuLoad"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "ProcessCpuTime"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "SystemCpuLoad"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "SystemLoadAverage"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "TotalPhysicalMemorySize"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "TotalSwapSpaceSize"}
+{"bean" "java.lang:type=OperatingSystem", "attribute" "Version"}
+{"bean" "java.lang:type=Runtime", "attribute" "BootClassPath"}
+{"bean" "java.lang:type=Runtime", "attribute" "BootClassPathSupported"}
+{"bean" "java.lang:type=Runtime", "attribute" "ClassPath"}
+{"bean" "java.lang:type=Runtime", "attribute" "InputArguments"}
+{"bean" "java.lang:type=Runtime", "attribute" "LibraryPath"}
+{"bean" "java.lang:type=Runtime", "attribute" "ManagementSpecVersion"}
+{"bean" "java.lang:type=Runtime", "attribute" "Name"}
+{"bean" "java.lang:type=Runtime", "attribute" "ObjectName"}
+{"bean" "java.lang:type=Runtime", "attribute" "SpecName"}
+{"bean" "java.lang:type=Runtime", "attribute" "SpecVendor"}
+{"bean" "java.lang:type=Runtime", "attribute" "SpecVersion"}
+{"bean" "java.lang:type=Runtime", "attribute" "StartTime"}
+{"bean" "java.lang:type=Runtime", "attribute" "SystemProperties"}
+{"bean" "java.lang:type=Runtime", "attribute" "Uptime"}
+{"bean" "java.lang:type=Runtime", "attribute" "VmName"}
+{"bean" "java.lang:type=Runtime", "attribute" "VmVendor"}
+{"bean" "java.lang:type=Runtime", "attribute" "VmVersion"}
+{"bean" "java.lang:type=Threading", "attribute" "AllThreadIds"}
+{"bean" "java.lang:type=Threading", "attribute" "CurrentThreadCpuTime"}
+{"bean" "java.lang:type=Threading", "attribute" "CurrentThreadCpuTimeSupported"}
+{"bean" "java.lang:type=Threading", "attribute" "CurrentThreadUserTime"}
+{"bean" "java.lang:type=Threading", "attribute" "DaemonThreadCount"}
+{"bean" "java.lang:type=Threading", "attribute" "ObjectMonitorUsageSupported"}
+{"bean" "java.lang:type=Threading", "attribute" "ObjectName"}
+{"bean" "java.lang:type=Threading", "attribute" "PeakThreadCount"}
+{"bean" "java.lang:type=Threading", "attribute" "SynchronizerUsageSupported"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadAllocatedMemoryEnabled"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadAllocatedMemorySupported"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadContentionMonitoringEnabled"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadContentionMonitoringSupported"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadCount"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadCpuTimeEnabled"}
+{"bean" "java.lang:type=Threading", "attribute" "ThreadCpuTimeSupported"}
+{"bean" "java.lang:type=Threading", "attribute" "TotalStartedThreadCount"}]

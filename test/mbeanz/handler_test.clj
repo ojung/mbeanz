@@ -3,6 +3,7 @@
             [mbeanz.handler :refer :all]
             [mbeanz.config :refer [config get-connection-map]]
             [ring.mock.request :as mock]
+            [clojure.edn :as edn]
             [clojure.data.json :as json]))
 
 (use-fixtures :each (fn [do-tests]
@@ -24,22 +25,7 @@
   (testing "list route"
     (request "/default/list" {}
              #(is (= (json/read-str (:body %))
-                     [{"bean" "java.lang:type=Memory", "operation" "gc"}
-                      {"bean" "java.lang:type=MemoryPool,name=Code Cache", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space"
-                       "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=Metaspace", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=Threading", "operation" "dumpAllThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "findDeadlockedThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "findMonitorDeadlockedThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadAllocatedBytes"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadCpuTime"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadInfo"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadUserTime"}
-                      {"bean" "java.lang:type=Threading", "operation" "resetPeakThreadCount"}])))))
+                     (edn/read-string (slurp "test/mbeanz/fixtures/list-route.edn")))))))
 
 (deftest describe-route
   (testing "operation with single signature"
@@ -88,7 +74,7 @@
                      {"error" {"class" "class java.lang.RuntimeException"
                                "message" "no config entry for :noooonexistant"}}))))
   (testing "different output for different configs"
-    (reset! config {:lang {:object-pattern "java.lang:*"
+    (reset! config {:lang {:object-pattern "java.lang:type=Threading"
                            :jmx-remote-host "localhost"
                            :jmx-remote-port 11080}
                     :logging {:object-pattern "java.util.logging:*"
@@ -96,24 +82,37 @@
                               :jmx-remote-port 11080}})
     (request "/lang/list" {}
              #(is (= (json/read-str (:body %))
-                     [{"bean" "java.lang:type=Memory", "operation" "gc"}
-                      {"bean" "java.lang:type=MemoryPool,name=Code Cache", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=Compressed Class Space"
-                       "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=Metaspace", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Eden Space", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Old Gen", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=MemoryPool,name=PS Survivor Space", "operation" "resetPeakUsage"}
-                      {"bean" "java.lang:type=Threading", "operation" "dumpAllThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "findDeadlockedThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "findMonitorDeadlockedThreads"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadAllocatedBytes"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadCpuTime"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadInfo"}
-                      {"bean" "java.lang:type=Threading", "operation" "getThreadUserTime"}
-                      {"bean" "java.lang:type=Threading", "operation" "resetPeakThreadCount"}])))
+                     (edn/read-string (slurp "test/mbeanz/fixtures/multiple-configs.edn")))))
     (request "/logging/list" {}
              #(is (= (json/read-str (:body %))
                      [{"bean" "java.util.logging:type=Logging", "operation" "getLoggerLevel"}
                       {"bean" "java.util.logging:type=Logging", "operation" "getParentLoggerName"}
-                      {"bean" "java.util.logging:type=Logging", "operation" "setLoggerLevel"}])))))
+                      {"bean" "java.util.logging:type=Logging", "operation" "setLoggerLevel"}
+                      {"bean" "java.util.logging:type=Logging", "attribute" "LoggerNames"}
+                      {"bean" "java.util.logging:type=Logging", "attribute" "ObjectName"}])))))
+
+(deftest read-attribute-route
+  (testing "read attribute"
+    (request "/default/read/Verbose" {"bean" "java.lang:type=Memory"}
+             #(is (= (json/read-str (:body %)) {"result" false}))))
+  (testing "read attribute failure (inexistent attribute)"
+    (request "/default/read/inexistent" {"bean" "java.lang:type=ClassLoading"}
+             #(is (= (json/read-str (:body %))
+                     {"error" {"class" "class javax.management.AttributeNotFoundException"
+                               "message" "No such attribute: inexistent"}})))))
+
+(deftest write-attribute-route
+  (testing "set the value of an attribute"
+    (request "/default/write/Verbose" {"bean" "java.lang:type=ClassLoading"
+                                       "value" "true"
+                                       "type" "boolean"}
+             #(is (= (json/read-str (:body %)) {"result" nil})))
+    (request "/default/read/Verbose" {"bean" "java.lang:type=ClassLoading"}
+             #(is (= (json/read-str (:body %)) {"result" true}))))
+  (testing "fail setting value because of incompatible type"
+    (request "/default/write/Verbose" {"bean" "java.lang:type=ClassLoading"
+                                       "value" "true"
+                                       "type" "java.lang.String"}
+             #(is (= (json/read-str (:body %))
+                     {"error" {"class" "class javax.management.InvalidAttributeValueException"
+                               "message" "Invalid value for attribute Verbose: true"}})))))
