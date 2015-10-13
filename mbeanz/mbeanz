@@ -113,6 +113,7 @@ if __name__ == "__main__":
             print_result(result)
         elif (type == '(attribute)'):
             read_attribute(mbean, member)
-    except Exception as exception:
-        if (not exception.message == ''):
-            print(exception.message)
+    except IndexError as exception:
+        print_usage()
+    except ValueError:
+        pass
