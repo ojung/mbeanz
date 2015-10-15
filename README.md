@@ -1,6 +1,6 @@
 # mbeanz
 
-Mbean search and execution util.
+Jmx mbean search and execution util.
 
 Uses [fzf](https://github.com/junegunn/fzf). 👍
 
