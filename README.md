@@ -25,7 +25,8 @@ vim /usr/local/etc/mbeanz.edn
 
 ## License
 
-Copyright © 2015 Oskar Jung
+[MIT](LICENSE)
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+## Author
+
+Oskar Jung
