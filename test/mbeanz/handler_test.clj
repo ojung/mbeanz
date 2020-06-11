@@ -6,10 +6,12 @@
             [clojure.edn :as edn]
             [clojure.data.json :as json]))
 
+(def jmx-port 7777)
+
 (use-fixtures :each (fn [do-tests]
                       (reset! config {:default {:object-pattern "java.lang:*"
                                                 :jmx-remote-host "localhost"
-                                                :jmx-remote-port 11080}})
+                                                :jmx-remote-port jmx-port}})
                       (do-tests)))
 
 (defn- request [url params cb]
@@ -19,7 +21,7 @@
 
 (deftest config-test
   (testing "get-connection-map"
-    (is (= (get-connection-map :default) {:host "localhost" :port 11080}))))
+    (is (= (get-connection-map :default) {:host "localhost" :port jmx-port}))))
 
 (deftest list-route
   (testing "list route"
@@ -62,7 +64,6 @@
   (testing "operation with single argument invoked with correct signature"
     ;TODO: Setup mock mbeans
     (request "/default/invoke/getThreadCpuTime"
-             ;Hoping this thread id doesn't exist
              {"bean" "java.lang:type=Threading", "args" "99999999999", "types" "long"}
              #(is (= (json/read-str (:body %)) {"result" -1})))))
 
@@ -76,10 +77,10 @@
   (testing "different output for different configs"
     (reset! config {:lang {:object-pattern "java.lang:type=Threading"
                            :jmx-remote-host "localhost"
-                           :jmx-remote-port 11080}
+                           :jmx-remote-port jmx-port}
                     :logging {:object-pattern "java.util.logging:*"
                               :jmx-remote-host "localhost"
-                              :jmx-remote-port 11080}})
+                              :jmx-remote-port jmx-port}})
     (request "/lang/list" {}
              #(is (= (json/read-str (:body %))
                      (edn/read-string (slurp "test/mbeanz/fixtures/multiple-configs.edn")))))
